@@ -1,0 +1,10 @@
+node_modules
+dist
+.wrangler
+.dev.vars
+.deepspace
+.worker-bundle.js
+*.tgz
+
+# Local agent/editor state (the deepspace skill bundle in .agents/ still ships).
+.claude
