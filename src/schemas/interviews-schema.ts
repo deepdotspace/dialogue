@@ -29,7 +29,7 @@ export const interviewsSchema: CollectionSchema = {
     {
       name: 'difficulty',
       storage: 'text',
-      interpretation: { kind: 'select', options: ['junior', 'mid', 'senior', 'staff'] },
+      interpretation: { kind: 'select', options: ['intern', 'junior', 'mid', 'senior', 'staff'] },
       default: 'mid',
       required: true,
     },

@@ -6,7 +6,7 @@ export type InterviewStatus = 'created' | 'live' | 'ended' | 'scored' | 'incompl
 
 export type InterviewType = 'behavioral' | 'coding' | 'system-design'
 
-export type Difficulty = 'junior' | 'mid' | 'senior' | 'staff'
+export type Difficulty = 'intern' | 'junior' | 'mid' | 'senior' | 'staff'
 
 /** Number of questions a session aims for — used to normalize the score. */
 export const EXPECTED_QUESTIONS = 6

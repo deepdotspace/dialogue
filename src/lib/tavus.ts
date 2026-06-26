@@ -21,12 +21,13 @@ const PROBLEM_MODEL = 'claude-sonnet-4-6'
 
 /** Map our level to an explicit LeetCode difficulty tier for the problem. */
 const LEETCODE_TIER: Record<Difficulty, string> = {
-  junior: 'LeetCode EASY (a gentle Medium at most). One clear data structure, straightforward logic.',
-  mid: 'LeetCode EASY-to-MEDIUM, leaning MEDIUM. One non-obvious insight or data-structure choice.',
+  intern: 'LeetCode EASY to lower-MEDIUM. One straightforward data structure; clean, direct logic.',
+  junior: 'LeetCode MEDIUM. One non-obvious insight or data-structure choice.',
+  mid: 'LeetCode HARD (a strong MEDIUM-HARD at the very easiest). A real algorithmic insight required.',
   senior:
-    'LeetCode MEDIUM-to-HARD, leaning MEDIUM/HARD. Requires a real algorithmic insight and edge-case rigor.',
+    'LeetCode HARD. Requires the optimal approach and edge-case rigor.',
   staff:
-    'LeetCode HARD, possibly multi-part or deliberately ambiguous. Requires the optimal approach and trade-off reasoning.',
+    'LeetCode HARD, often multi-part or deliberately ambiguous. Requires the optimal approach and deep trade-off reasoning.',
 }
 
 /** Canonical interview patterns — we pick one at random for variety. */
@@ -64,12 +65,14 @@ export interface InterviewerOption {
 
 /** How the chosen level shifts difficulty + interviewer expectations. */
 const DIFFICULTY_GUIDANCE: Record<Difficulty, string> = {
+  intern:
+    'Target an intern candidate: approachable problems and an encouraging tone; expect a working solution and basic reasoning.',
   junior:
-    'Target an early-career / new-grad candidate: foundational problems, supportive tone, expect basic-but-correct solutions.',
+    'Target an early-career / new-grad candidate: solid standard problems; expect a correct solution and some trade-off awareness.',
   mid:
-    'Target a mid-level candidate: standard problems of moderate difficulty, expect solid solutions with reasonable trade-off awareness.',
+    'Target a mid-level candidate: challenging problems; expect a strong, efficient solution with clear trade-off reasoning.',
   senior:
-    'Target a senior candidate: harder, more open-ended problems; expect strong solutions, edge-case rigor, and clear trade-off reasoning.',
+    'Target a senior candidate: hard, open-ended problems; expect optimal solutions, edge-case rigor, and crisp trade-offs.',
   staff:
     'Target a staff/principal candidate: ambiguous, high-difficulty problems; expect optimal solutions, deep trade-offs, and systems thinking.',
 }
@@ -114,11 +117,18 @@ function typeInstructions(type: InterviewType, opts: PromptOpts): string {
         'This is a CODING interview.',
         fixed,
         'Run it in this order, and do NOT skip ahead:',
-        '1) First, discuss the APPROACH — ask the candidate to think out loud about clarifications, examples, edge cases,',
-        'and the data structures / algorithm they would use, and why. Probe their reasoning and guide them if stuck.',
-        '2) Only once they have articulated a sound approach, tell them in words to open the code pad and implement it.',
-        '3) After they implement, ask them to state the TIME and SPACE complexity and discuss whether it can be improved.',
-        'Give HINTS only when the candidate explicitly asks for one, one at a time, progressively — never hand them the full answer.',
+        '1) Open with a brief icebreaker — greet them and ask them to introduce themselves and their background in a sentence or two. Keep this short, then move on.',
+        '2) Discuss the APPROACH — ask the candidate to think out loud about clarifications, examples, edge cases,',
+        'and the data structures / algorithm they would use, and why.',
+        '3) Only once they have articulated a sound approach, tell them in words to open the code pad and implement it.',
+        '4) After they implement, ask THEM to state the TIME and SPACE complexity and whether it can be improved — never state it for them.',
+        '',
+        'CRITICAL — your job is to GUIDE, not to solve. Behave like a real interviewer who is evaluating them:',
+        '- Lead with short questions, not explanations. Keep your turns to 1-3 sentences; do not lecture or fill silence.',
+        "- Never volunteer the key insight, the optimal data structure/algorithm, the trick, or the complexity. Make THEM produce it.",
+        '- When they are on the right track, acknowledge briefly ("that direction works — keep going") and stay quiet. Do NOT confirm the full solution or spell out the remaining steps.',
+        '- If they are stuck, ask a guiding question first (e.g. "what happens if the input is sorted?"). Do not give a hint unless they explicitly ask.',
+        '- When they ask for a hint, give only the SMALLEST next nudge (the next hint in order) and nothing more. Never jump to the final hint unless they have asked several times and are genuinely stuck.',
         'Stick to this ONE problem; go deep rather than broad.',
       ]
         .filter(Boolean)
@@ -164,11 +174,11 @@ export function buildSystemPrompt(
 /** First spoken line so the candidate isn't met with silence. */
 export function buildGreeting(role: string, interviewType: InterviewType): string {
   const opener =
-    interviewType === 'behavioral'
-      ? 'could you start by telling me a bit about yourself and your background?'
-      : interviewType === 'coding'
-        ? "your coding problem is on the screen — but before any code, walk me through how you'd approach it. Ready?"
-        : "let's work through a system design problem together. Ready to dig in?"
+    interviewType === 'coding'
+      ? "to start, tell me a bit about yourself and your background — then we'll dive into the coding problem on your screen."
+      : interviewType === 'system-design'
+        ? "to start, tell me a bit about yourself and your background — then we'll work through a system design problem together."
+        : 'could you start by telling me a bit about yourself and your background?'
   return `Hi, thanks for joining. I'll be your interviewer today for the ${role} role. Let's get started — ${opener}`
 }
 

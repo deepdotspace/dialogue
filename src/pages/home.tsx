@@ -47,6 +47,7 @@ const INTERVIEW_TYPES: { value: InterviewType; label: string; hint: string; icon
 ]
 
 const LEVELS: { value: Difficulty; label: string }[] = [
+  { value: 'intern', label: 'Intern' },
   { value: 'junior', label: 'Junior' },
   { value: 'mid', label: 'Mid' },
   { value: 'senior', label: 'Senior' },
@@ -286,7 +287,7 @@ function NewInterviewForm() {
 
         <div className="space-y-2.5">
           <Label>Level</Label>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
             {LEVELS.map((l) => {
               const active = difficulty === l.value
               return (
