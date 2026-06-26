@@ -12,8 +12,17 @@
 import { integration } from 'deepspace'
 import type { Difficulty, InterviewType } from '../types'
 
-/** ~10 minutes is plenty for a 6-question mock interview. */
-const MAX_CALL_DURATION_SECONDS = 600
+/**
+ * Hard cap on call length, in MINUTES, by interview type — Tavus ends the call
+ * (and shows "The meeting has ended") once this is hit. Coding/system-design
+ * need much more room than a behavioral chat. Bounds owner cost while being
+ * generous enough that real sessions don't get cut off mid-answer.
+ */
+export const CALL_LIMIT_MINUTES: Record<InterviewType, number> = {
+  behavioral: 30,
+  coding: 45,
+  'system-design': 45,
+}
 
 // Problem generation calibrates difficulty + topic, so use the stronger model
 // (one call at provision time — quality matters more than the extra second).
@@ -351,13 +360,14 @@ export async function startConversation(opts: StartConversationOpts): Promise<St
       conversation_name: `${role} mock interview`,
       custom_greeting: buildGreeting(role, interviewType),
       properties: {
-        max_call_duration: MAX_CALL_DURATION_SECONDS,
+        max_call_duration: CALL_LIMIT_MINUTES[interviewType] * 60,
         enable_transcription: true,
         enable_closed_captions: true,
-        // Be forgiving about brief drop-offs so a reconnect doesn't kill the
-        // room; the candidate still controls the end via "End interview".
-        participant_left_timeout: 90,
-        participant_absent_timeout: 180,
+        // Be forgiving about brief drop-offs / long thinking pauses so a
+        // reconnect or quiet stretch doesn't kill the room; the candidate
+        // still controls the end via "End interview".
+        participant_left_timeout: 120,
+        participant_absent_timeout: 300,
       },
     })) as TavusResult<{ conversation_id: string; conversation_url: string }>,
     'create-conversation',

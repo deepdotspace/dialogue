@@ -31,7 +31,12 @@ import {
 } from '../../../components/ui'
 import { cn } from '../../../components/ui/utils'
 import { SCOPE_ID } from '../../../constants'
-import { startConversation, endConversation, getConversationState } from '../../../lib/tavus'
+import {
+  startConversation,
+  endConversation,
+  getConversationState,
+  CALL_LIMIT_MINUTES,
+} from '../../../lib/tavus'
 import type { Interview, InterviewType } from '../../../types'
 
 const LANGUAGES = ['Python', 'JavaScript', 'TypeScript', 'Java', 'C++', 'Go', 'Ruby', 'C#']
@@ -213,6 +218,11 @@ export default function InterviewLivePage() {
             <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
               {TYPE_LABEL[data.interviewType]} interview
             </span>
+            {data.status === 'live' && !convEnded && (
+              <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                · up to {CALL_LIMIT_MINUTES[data.interviewType]} min
+              </span>
+            )}
           </div>
           <h1 className="mt-1.5 truncate font-serif text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
             {data.role}
