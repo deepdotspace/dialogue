@@ -96,9 +96,7 @@ function HomeHeader() {
       className="flex items-center justify-between py-5"
     >
       <Link to="/home" className="flex items-center gap-2.5">
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary">
-          <span className="h-2.5 w-2.5 rounded-full bg-background" />
-        </span>
+        <img src="/favicon.svg" alt="" className="h-7 w-7 rounded-lg" />
         <span className="font-serif text-xl font-semibold tracking-tight text-foreground">Dialogue</span>
       </Link>
       <AccountControl />

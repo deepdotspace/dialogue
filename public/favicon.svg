@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Dialogue — practice interviews with an AI interviewer on screen
+       (Tavus video avatar). A video-call window with the interviewer's
+       head-and-shoulders and a green live indicator. Colors from the
+       app's "studio" theme in src/themes.css. -->
+  <rect width="64" height="64" rx="14" fill="#0a0a0b"/>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="13.5" fill="none" stroke="#ffffff" stroke-opacity="0.09"/>
+
+  <!-- video-call window -->
+  <rect x="12" y="14" width="40" height="36" rx="6" fill="#17171a" stroke="#ffffff" stroke-opacity="0.16" stroke-width="1.5"/>
+  <clipPath id="win">
+    <rect x="12" y="14" width="40" height="36" rx="6"/>
+  </clipPath>
+  <!-- the interviewer on screen -->
+  <g clip-path="url(#win)" fill="#f4f4f5">
+    <circle cx="32" cy="30" r="6.5"/>
+    <path d="M21 50a11 11 0 0 1 22 0Z"/>
+  </g>
+  <!-- live indicator -->
+  <circle cx="46" cy="20.5" r="2.6" fill="#3fb950"/>
+</svg>
